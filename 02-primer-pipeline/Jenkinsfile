@@ -19,7 +19,7 @@ pipeline{
   stages {//run a docker build
     stage ('docker build'){
       steps {
-        scripts {
+        script {
           sh "docker build -f 02-primer-pipeline/Dockerfile -t caosbinario/homer_page:1.0.0-${BUILD_ID} 02-primer-pipeline"
         }
       }
@@ -27,7 +27,7 @@ pipeline{
     //run a docker push
     stage ('docker push'){
       steps {
-        scripts {
+        script {
           sh "docker push caosbinario/homer_page:1.0.0-${BUILD_ID}"
         }
       }
