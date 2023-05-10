@@ -30,7 +30,13 @@ pipeline{
         always { 
             echo 'always runs regardless of the completion status of the Pipeline run'
             deleteDir()
-        }
+            script {
+                    def result = currentBuild.result
+                    if (result == null) {
+                    result = "SUCCESS"
+                                        }
+                    }
+                 }
    success {
       echo 'step will run only if the build is successful'
     }
@@ -42,6 +48,7 @@ pipeline{
     }
     changed {
       echo 'can only be run if the current Pipeline is running at a different state than the previously completed Pipeline'
+      echo "Status Changed: [From: $currentBuild.previousBuild.result, To: $currentBuild.result]"
     }
     }   
 }
