@@ -1,15 +1,15 @@
 def AGENT_LABEL = null
+//Specifying agent node name
 AGENT_LABEL = "JenkinsAgent"
 
 pipeline{
   //agent any
-  //node('JenkinsAgent')
-   agent {
+     agent {//Specifying on which agent node have to run
        label "${AGENT_LABEL}"
     }
   options { //Specifying a global execution timeout of one hour, after which Jenkins will abort the Pipeline run.
     timeout(time: 1, unit: 'HOURS')}
-  stages {
+  stages {//run a docker build
     stage ('docker build'){
       steps {
         scripts {
@@ -17,6 +17,7 @@ pipeline{
         }
       }
     }
+    //run a docker push
     stage ('docker push'){
       steps {
         scripts {
