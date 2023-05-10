@@ -8,7 +8,7 @@ pipeline{
        label "${AGENT_LABEL}"
     }
   options { //Specifying a global execution timeout of one hour, after which Jenkins will abort the Pipeline run.
-        timeout(time: 1, unit: 'HOURS')
+    timeout(time: 1, unit: 'HOURS')}
   stages {
     stage ('docker build'){
       steps {
