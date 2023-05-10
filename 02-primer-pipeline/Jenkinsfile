@@ -2,6 +2,9 @@ def AGENT_LABEL = null
 //Specifying agent node name
 AGENT_LABEL = "JenkinsAgent"
 
+def ENVIRONMENT_NAME="${JOB_NAME}".tokenize('-').last().toLowerCase()
+
+
 pipeline{
   //agent any
      agent {//Specifying on which agent node have to run
@@ -42,6 +45,7 @@ pipeline{
          }
          success {
             echo 'step will run only if the build is successful'
+           echo "The pipeline ${currentBuild.fullDisplayName} completed successfully."
          }
         failure {
           echo 'only when the Pipeline is currently in a "failed" state run, usually expressed in the Web UI with the red indicator.'
