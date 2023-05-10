@@ -8,7 +8,10 @@ pipeline{
        label "${AGENT_LABEL}"
     }
   options { //Specifying a global execution timeout of one hour, after which Jenkins will abort the Pipeline run.
-    timeout(time: 1, unit: 'HOURS')}
+    timeout(time: 1, unit: 'HOURS')
+    timestamps()
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+  }
   stages {//run a docker build
     stage ('docker build'){
       steps {
@@ -26,7 +29,7 @@ pipeline{
       }
     }
   }
- post { 
+ post { //Bloque post
         always { 
             echo 'always runs regardless of the completion status of the Pipeline run'
             deleteDir()
@@ -36,19 +39,19 @@ pipeline{
                     result = "SUCCESS"
                                         }
                     }
-                 }
-   success {
-      echo 'step will run only if the build is successful'
-    }
-    failure {
-      echo 'only when the Pipeline is currently in a "failed" state run, usually expressed in the Web UI with the red indicator.'
-    }
-    unstable {
-      echo 'current Pipeline has "unstable" state, usually by a failed test, code violations and other causes, in order to run. Usually represented in a web UI with a yellow indication.'
-    }
+         }
+         success {
+            echo 'step will run only if the build is successful'
+         }
+        failure {
+          echo 'only when the Pipeline is currently in a "failed" state run, usually expressed in the Web UI with the red indicator.'
+         }
+        unstable {
+          echo 'current Pipeline has "unstable" state, usually by a failed test, code violations and other causes, in order to run. Usually represented in a web UI with a yellow indication.'
+         }
     changed {
       echo 'can only be run if the current Pipeline is running at a different state than the previously completed Pipeline'
       echo "Status Changed: [From: $currentBuild.previousBuild.result, To: $currentBuild.result]"
     }
-    }   
+   } //fin bloque post
 }
