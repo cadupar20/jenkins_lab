@@ -36,12 +36,10 @@ pipeline{
  post { //Bloque post
         always { 
             echo 'always runs regardless of the completion status of the Pipeline run'
-            deleteDir()
+            //deleteDir()
             script {
                     def result = currentBuild.result
-                    if (result == null) {
-                    result = "SUCCESS"
-                                        }
+                    if (result == null) {result = "SUCCESS"}
                     }
          }
          success {
