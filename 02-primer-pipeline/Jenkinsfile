@@ -14,6 +14,7 @@ pipeline{
     timeout(time: 1, unit: 'HOURS')
     timestamps()
     buildDiscarder(logRotator(numToKeepStr: '5'))
+    disableConcurrentBuilds()
   }
   stages {//run a docker build
     stage ('docker build'){
