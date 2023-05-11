@@ -9,13 +9,17 @@ pipeline{
   //agent any
      agent {//Specifying on which agent node have to run
        label "${AGENT_LABEL}"
-    }
+           }
   options { //Specifying a global execution timeout of one hour, after which Jenkins will abort the Pipeline run.
     timeout(time: 1, unit: 'HOURS')
     timestamps()
     buildDiscarder(logRotator(numToKeepStr: '5'))
     disableConcurrentBuilds()
-  }
+          }
+   environment {
+     DOCKER_ID = credentials('DOCKER_ID')
+     DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
+     }
   stages {//run a docker build
     stage ('docker build'){
       steps {
