@@ -39,6 +39,9 @@ pipeline{
  post { //Bloque post
         always { 
             echo 'always runs regardless of the completion status of the Pipeline run'
+            echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
+            echo "Current branch: ${env.BRANCH_NAME}"
+            //sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin'
           //Borra Dir de Trabajo  
           //deleteDir()
             script {
