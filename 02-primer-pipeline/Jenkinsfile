@@ -22,15 +22,23 @@ pipeline{
      }
   }
   stages {
-    stage ('docker image cleaner & Login'){
+    stage ('docker Login'){
       steps {
         scripts {
           //sh "docker version"
-          sh "docker rmi $(docker images | grep stuff_ | tr -s ' ' | cut -d ' ' -f 3)"
+          //sh "docker rmi $(docker images | grep stuff_ | tr -s ' ' | cut -d ' ' -f 3)"
           sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin"
         }
       }
     }
+           stage('Cleanup') {
+            steps {
+                echo 'Removing unused docker containers and images..'
+                sh 'docker ps -aq | xargs --no-run-if-empty docker rm'
+                // keep intermediate images as cache, only delete the final image
+                sh 'docker images -q | xargs --no-run-if-empty docker rmi'
+            }
+        }
    //run a docker build
     stage ('docker build'){
       steps {
