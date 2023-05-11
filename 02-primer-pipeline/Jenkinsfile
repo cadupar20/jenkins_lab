@@ -16,7 +16,22 @@ pipeline{
     buildDiscarder(logRotator(numToKeepStr: '5'))
     disableConcurrentBuilds()
   }
-  stages {//run a docker build
+   environment {
+     DOCKER_ID = credentials('DOCKER_ID')
+     DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
+     }
+  }
+  stages {
+    stage ('docker image cleaner & Login'){
+      steps {
+        scripts {
+          //sh "docker version"
+          sh "docker rmi $(docker images | grep stuff_ | tr -s ' ' | cut -d ' ' -f 3)"
+          sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin"
+        }
+      }
+    }
+   //run a docker build
     stage ('docker build'){
       steps {
         script {
