@@ -20,7 +20,8 @@ pipeline{
     stage ('docker build'){
       steps {
         script {
-          sh "docker build -f 02-primer-pipeline/Dockerfile -t caosbinario/homer_page:1.0.0-${BUILD_ID} 02-primer-pipeline"
+          //sh "docker build -f 02-primer-pipeline/Dockerfile -t caosbinario/homer_page:1.0.0-${BUILD_ID} 02-primer-pipeline"
+          sh "docker version"
         }
       }
     }
@@ -36,14 +37,15 @@ pipeline{
  post { //Bloque post
         always { 
             echo 'always runs regardless of the completion status of the Pipeline run'
-            //deleteDir()
+          //Borra Dir de Trabajo  
+          //deleteDir()
             script {
                     def result = currentBuild.result
                     if (result == null) {result = "SUCCESS"}
                     }
          }
          success {
-            echo 'step will run only if the build is successful'
+           echo 'step will run only if the build is successful'
            echo "The pipeline ${currentBuild.fullDisplayName} completed successfully."
          }
         failure {
