@@ -23,7 +23,7 @@ pipeline{
     //run docker login
     stage ('docker login'){
       steps {
-        scripts {
+        script {
                 sh "docker version"
                 //sh "docker rmi $(docker images | grep stuff_ | tr -s ' ' | cut -d ' ' -f 3)"
                 //sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin"
