@@ -21,8 +21,8 @@ pipeline{
 //     }
 
   stages {
-    //run docker login
-    stage ('docker login'){
+    //run docker version
+    stage ('docker version'){
       steps {
         script {
                 sh "docker version"
@@ -66,13 +66,13 @@ pipeline{
            echo 'step will run only if the build is successful'
            echo "The pipeline ${currentBuild.fullDisplayName} completed successfully."
            
-                sh """
-                    docker images -a \
-                        | awk '{ print \\$1,\\$2 }' \
-                        | grep cadupar/demo:1.0.0-${BUILD_ID} \
-                        | awk '{print \\$1 }' \
-                        | xargs -I {} docker rmi -f {}
-                """       
+                //sh """
+//                    docker images -a \
+  //                      | awk '{ print \\$1,\\$2 }' \
+   //                     | grep cadupar/demo:1.0.0-${BUILD_ID} \
+    //                    | awk '{print \\$1 }' \
+     //                   | xargs -I {} docker rmi -f {}
+      //          """       
          }
         failure {
           echo 'only when the Pipeline is currently in a "failed" state run, usually expressed in the Web UI with the red indicator.'
