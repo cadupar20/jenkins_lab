@@ -15,10 +15,11 @@ pipeline{
     buildDiscarder(logRotator(numToKeepStr: '5'))
     disableConcurrentBuilds()
           }
-// environment {// Get Docker credentials on Jenkins environment
-//     DOCKER_ID = credentials('DOCKER_ID')
-//     DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
-//     }
+ environment {// Get Docker credentials on Jenkins environment
+     DOCKER_ID = credentials('DOCKER_ID')
+     DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
+     }
+
   stages {
     //run docker login
     stage ('docker login'){
@@ -43,8 +44,8 @@ pipeline{
     //run a docker push
     stage ('docker push'){
       steps {
-        script { //withDockerRegistry([ credentialsId: "DOCKER_HUB", url: "" ]) 
-              //sh "docker push caosbinario/homer_page:1.0.0-${BUILD_ID}"
+        withDockerRegistry([ credentialsId: "DOCKER_HUB", url: "" ]) //script 
+              { //sh "docker push caosbinario/homer_page:1.0.0-${BUILD_ID}"
               sh "docker push cadupar/demo:1.0.0-${BUILD_ID}"
               }
             }
