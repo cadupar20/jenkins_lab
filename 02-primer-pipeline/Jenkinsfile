@@ -26,9 +26,9 @@ pipeline{
     stage ('docker login'){
       steps {
         scripts {
-          //sh "docker version"
+          sh "docker version"
           //sh "docker rmi $(docker images | grep stuff_ | tr -s ' ' | cut -d ' ' -f 3)"
-          sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin"
+          //sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin"
                 }
              }
       }
@@ -47,7 +47,8 @@ pipeline{
     //run a docker push
     stage ('docker push'){
       steps {
-        script {
+        //script
+         withDockerRegistry([ credentialsId: "DOCKER_HUB", url: "" ]) {
           //sh "docker push caosbinario/homer_page:1.0.0-${BUILD_ID}"
           sh "docker push cadupar/demo:1.0.0-${BUILD_ID}"
         }
