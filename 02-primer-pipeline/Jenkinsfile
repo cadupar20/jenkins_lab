@@ -16,11 +16,24 @@ pipeline{
     buildDiscarder(logRotator(numToKeepStr: '5'))
     disableConcurrentBuilds()
           }
-   environment {
+   environment {// Get Docker credentials on Jenkins environment
      DOCKER_ID = credentials('DOCKER_ID')
      DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
      }
-  stages {//run a docker build
+  stages {
+
+    //run docker login
+    stage ('docker login'){
+      steps {
+        scripts {
+          //sh "docker version"
+          //sh "docker rmi $(docker images | grep stuff_ | tr -s ' ' | cut -d ' ' -f 3)"
+          sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin"
+                }
+             }
+      }
+        
+    //run docker build locally
     stage ('docker build'){
       steps {
         script {
@@ -30,17 +43,7 @@ pipeline{
         }
       }
     }
-    
-    stage ('docker Login'){
-      steps {
-        scripts {
-          //sh "docker version"
-          //sh "docker rmi $(docker images | grep stuff_ | tr -s ' ' | cut -d ' ' -f 3)"
-          sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin"
-        }
-      }
-    }
-    
+
     //run a docker push
     stage ('docker push'){
       steps {
@@ -56,14 +59,13 @@ pipeline{
             echo 'always runs regardless of the completion status of the Pipeline run'
             echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
             echo "Current branch: ${env.BRANCH_NAME}"
-            //sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin'
-          //Borra Dir de Trabajo  
-          //deleteDir()
+            //Borra Dir Workspace de Jenkins (Cleanup)
+            //deleteDir()
             script {
                     def result = currentBuild.result
                     if (result == null) {result = "SUCCESS"}
                     }
-         }
+               }
          success {
            echo 'step will run only if the build is successful'
            echo "The pipeline ${currentBuild.fullDisplayName} completed successfully."
