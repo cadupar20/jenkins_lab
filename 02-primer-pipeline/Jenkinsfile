@@ -65,14 +65,17 @@ pipeline{
          success {
            echo 'step will run only if the build is successful'
            echo "The pipeline ${currentBuild.fullDisplayName} completed successfully."
-           
-                //sh """
-//                    docker images -a \
-  //                      | awk '{ print \\$1,\\$2 }' \
-   //                     | grep cadupar/demo:1.0.0-${BUILD_ID} \
-    //                    | awk '{print \\$1 }' \
-     //                   | xargs -I {} docker rmi -f {}
-      //          """       
+           echo 'Removing unused docker containers and images..'
+           sh 'docker ps -aq | xargs --no-run-if-empty docker rm'
+           // keep intermediate images as cache, only delete the final image
+           sh 'docker images -q | xargs --no-run-if-empty docker rmi' 
+          // sh """
+          //   docker images -a \
+          //   | awk '{ print \\$1,\\$2 }' \
+          //   | grep cadupar/demo:1.0.0-${BUILD_ID} \
+          //   | awk '{print \\$1 }' \
+          //   | xargs -I {} docker rmi -f {}
+          //    """       
          }
         failure {
           echo 'only when the Pipeline is currently in a "failed" state run, usually expressed in the Web UI with the red indicator.'
