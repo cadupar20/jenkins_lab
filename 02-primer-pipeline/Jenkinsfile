@@ -4,7 +4,6 @@ AGENT_LABEL = "JenkinsAgent"
 
 def ENVIRONMENT_NAME="${JOB_NAME}".tokenize('-').last().toLowerCase()
 
-
 pipeline{
   //agent any
      agent {//Specifying on which agent node have to run
@@ -16,12 +15,11 @@ pipeline{
     buildDiscarder(logRotator(numToKeepStr: '5'))
     disableConcurrentBuilds()
           }
-   environment {// Get Docker credentials on Jenkins environment
-     DOCKER_ID = credentials('DOCKER_ID')
-     DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
-     }
+// environment {// Get Docker credentials on Jenkins environment
+//     DOCKER_ID = credentials('DOCKER_ID')
+//     DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
+//     }
   stages {
-
     //run docker login
     stage ('docker login'){
       steps {
