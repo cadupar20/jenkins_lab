@@ -45,8 +45,9 @@ pipeline{
     //run a docker push
     stage ('docker push'){
       steps {
-        //script
-         withDockerRegistry([ credentialsId: "DOCKER_HUB", url: "" ]) {
+        script
+         //withDockerRegistry([ credentialsId: "DOCKER_HUB", url: "" ]) 
+          {
           //sh "docker push caosbinario/homer_page:1.0.0-${BUILD_ID}"
           sh "docker push cadupar/demo:1.0.0-${BUILD_ID}"
         }
