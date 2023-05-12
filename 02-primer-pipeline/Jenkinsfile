@@ -15,10 +15,10 @@ pipeline{
     buildDiscarder(logRotator(numToKeepStr: '5'))
     disableConcurrentBuilds()
           }
- environment {// Get Docker credentials on Jenkins environment
-     DOCKER_ID = credentials('DOCKER_ID')
-     DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
-     }
+// environment {// Get Docker credentials on Jenkins environment
+//     DOCKER_ID = credentials('DOCKER_ID')
+//     DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
+//     }
 
   stages {
     //run docker login
@@ -36,12 +36,11 @@ pipeline{
       steps {
         script {
                 //sh "docker build -f 02-primer-pipeline/Dockerfile -t caosbinario/homer_page:1.0.0-${BUILD_ID} 02-primer-pipeline"
-                //sh "docker version"
                 sh "docker build -f 02-primer-pipeline/Dockerfile -t cadupar/demo:1.0.0-${BUILD_ID} 02-primer-pipeline"
         }
       }
     }
-    //run a docker push
+    //run a docker push on Docher Hub Repo
     stage ('docker push'){
       steps {
         withDockerRegistry([ credentialsId: "DOCKER_HUB", url: "" ]) //script 
@@ -66,6 +65,14 @@ pipeline{
          success {
            echo 'step will run only if the build is successful'
            echo "The pipeline ${currentBuild.fullDisplayName} completed successfully."
+           
+                sh """
+                    docker images -a \
+                        | awk '{ print \\$1,\\$2 }' \
+                        | grep cadupar/demo:1.0.0-${BUILD_ID} \
+                        | awk '{print \\$1 }' \
+                        | xargs -I {} docker rmi -f {}
+                """       
          }
         failure {
           echo 'only when the Pipeline is currently in a "failed" state run, usually expressed in the Web UI with the red indicator.'
