@@ -24,35 +24,31 @@ pipeline{
     stage ('docker login'){
       steps {
         scripts {
-          sh "docker version"
-          //sh "docker rmi $(docker images | grep stuff_ | tr -s ' ' | cut -d ' ' -f 3)"
-          //sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin"
+                sh "docker version"
+                //sh "docker rmi $(docker images | grep stuff_ | tr -s ' ' | cut -d ' ' -f 3)"
+                //sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin"
                 }
              }
       }
-        
     //run docker build locally
     stage ('docker build'){
       steps {
         script {
-          //sh "docker build -f 02-primer-pipeline/Dockerfile -t caosbinario/homer_page:1.0.0-${BUILD_ID} 02-primer-pipeline"
-          //sh "docker version"
-            sh "docker build -f 02-primer-pipeline/Dockerfile -t cadupar/demo:1.0.0-${BUILD_ID} 02-primer-pipeline"
+                //sh "docker build -f 02-primer-pipeline/Dockerfile -t caosbinario/homer_page:1.0.0-${BUILD_ID} 02-primer-pipeline"
+                //sh "docker version"
+                sh "docker build -f 02-primer-pipeline/Dockerfile -t cadupar/demo:1.0.0-${BUILD_ID} 02-primer-pipeline"
         }
       }
     }
-
     //run a docker push
     stage ('docker push'){
       steps {
-        script
-         //withDockerRegistry([ credentialsId: "DOCKER_HUB", url: "" ]) 
-          {
-          //sh "docker push caosbinario/homer_page:1.0.0-${BUILD_ID}"
-          sh "docker push cadupar/demo:1.0.0-${BUILD_ID}"
-        }
+        script { //withDockerRegistry([ credentialsId: "DOCKER_HUB", url: "" ]) 
+              //sh "docker push caosbinario/homer_page:1.0.0-${BUILD_ID}"
+              sh "docker push cadupar/demo:1.0.0-${BUILD_ID}"
+              }
+            }
       }
-    }
   }
  post { //Bloque post
         always { 
@@ -60,7 +56,7 @@ pipeline{
             echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
             echo "Current branch: ${env.BRANCH_NAME}"
             //Borra Dir Workspace de Jenkins (Cleanup)
-            //deleteDir()
+            deleteDir()
             script {
                     def result = currentBuild.result
                     if (result == null) {result = "SUCCESS"}
