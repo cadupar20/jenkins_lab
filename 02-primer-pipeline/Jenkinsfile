@@ -66,9 +66,10 @@ pipeline{
            echo 'step will run only if the build is successful'
            echo "The pipeline ${currentBuild.fullDisplayName} completed successfully."
            echo 'Removing unused docker containers and images..'
-           sh 'docker ps -aq | xargs --no-run-if-empty docker rm'
+           sh "docker rmi cadupar/demo:1.0.0-${BUILD_ID}"
+           //sh 'docker ps -aq | xargs --no-run-if-empty docker rm'
            // keep intermediate images as cache, only delete the final image
-           sh 'docker images -q | xargs --no-run-if-empty docker rmi' 
+           //sh 'docker images -q | xargs --no-run-if-empty docker rmi' 
           // sh """
           //   docker images -a \
           //   | awk '{ print \\$1,\\$2 }' \
